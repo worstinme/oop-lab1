@@ -2,10 +2,10 @@
 
 #include "stdlib.h"
 #include "string.h"
-#include <iostream>
+#include "iostream"
 #include "main.h"
-#include <sstream>
-#include <algorithm>
+#include "sstream"
+#include "algorithm"
 
 // constructor with parameters
 Phone::Phone(char a, int b, float c) {
