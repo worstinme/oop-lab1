@@ -29,7 +29,7 @@ void Phone::Input() {
 	cout << "Input mark (single Alphabetical char): " << endl;
 	cin >> value;
 	while (validateAndSetMark(value) == false) {
-		cout << "please input only single alphabetic char [a-Z]{1}: " << endl;
+		cout << "please input only single alphabetic char: " << endl;
 		cin.clear();
 		cin >> value;
 	}
