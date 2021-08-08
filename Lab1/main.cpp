@@ -4,7 +4,8 @@
 #include "string.h"
 #include <iostream>
 #include "main.h"
-
+#include <sstream>
+#include <algorithm>
 
 // constructor with parameters
 Phone::Phone(char a, int b, float c) {
@@ -20,22 +21,42 @@ void Phone::Print()const {
     cout << "Sum -> " << getSum() << endl;
 }
 
+// set user data with validation of input values
 void Phone::Input() {
-	char m;
-	int n;
-	float s;
-	cout << "Input mark: ";
-	cin >> m;
-	setMark(m);
-	cout << "Input num: ";
-	cin >> n;
-	setNum(n);
-	cout << "Input sum: ";
-	cin >> s;
-	setSum(s);
+
+	string value;
+	// wait for char M input
+	cout << "Input mark (single Alphabetical char): " << endl;
+	cin >> value;
+	while (validateAndSetMark(value) == false) {
+		cout << "please input only single alphabetic char [a-Z]{1}: " << endl;
+		cin.clear();
+		cin >> value;
+	}
+	cin.clear();
+
+	// wait for valid Num input
+	cout << "Input num (Int): " << endl;
+	cin >> value;
+	while (validateAndSetNum(value) == false) {
+		cout << "please input only int from 0 to 2147483647: " << endl;
+		cin.clear();
+		cin >> value;
+	}
+	cin.clear();
+
+	// wait for valid Num input
+	cout << "Input sum (float, 0+, with dot separator): " << endl;
+	cin >> value;
+	while (validateAndSetSum(value) == false) {
+		cout << "please input float number, with dot as decimal separator only: " << endl;
+		cin.clear();
+		cin >> value;
+	}
+	cin.clear();
 }
 
-int main()
+int main() 
 {
 	setlocale(LC_ALL, "rus");
 	Phone p{ 'I',231029,23.123f }; // define object by contructor
@@ -53,6 +74,7 @@ int main()
 	p.Print();
 	cout << endl;
 	system("pause");
+	return 0;
 }
 
 // getters
@@ -68,9 +90,77 @@ float Phone::getSum()const {
 	return sum;
 }
 
-// setters
-void Phone::setMark(char val)
+// setters with validation
+bool Phone::validateAndSetMark(string value)
 {
+	if (value.length() != 1) //validate that string contains only 1 char
+	{
+		return false;
+	}
+	if (!isalpha(static_cast<unsigned char>(value[0]))) { // validate 1 char is valid alphabetic 
+		return false;
+	}
+	mark = value[0];
+	return true;
+}
+
+bool Phone::validateAndSetNum(string value)
+{
+	// check if string is empty or not integer-like
+	if (value.empty() || !isStringContainsDigitsOnly(value)) {
+		return false;
+	}
+
+	// cast string to integer
+	std::istringstream issValue(value);
+	int castedNumber;
+	issValue >> castedNumber;
+
+	// check if cast was succeed and casted number is greater then 0
+	if (issValue.fail() || castedNumber <= 0) {
+		return false;
+	}
+
+	num = castedNumber;
+	issValue.clear();
+
+	return true;
+}
+
+bool Phone::validateAndSetSum(string value)
+{
+	// check if string is empty or not numeric
+	if (value.empty() || !isNumericString(value)) {
+		return false;
+	}
+
+	//cast string to float
+	istringstream issValue(value);
+	float castedNumber;
+	issValue >> castedNumber;
+
+	// check if cast is succeed and float is greater then 0
+	if (issValue.fail() || castedNumber <= 0) {
+		return false;
+	}
+
+	sum = castedNumber;
+	issValue.clear();
+	return true;
+}
+
+bool Phone::isStringContainsDigitsOnly(const string s)
+{
+	return(strspn(s.c_str(), "0123456789") == s.size());
+}
+
+bool Phone::isNumericString(const string s)
+{
+	return(strspn(s.c_str(), ".0123456789") == s.size());
+}
+
+// setters
+void Phone::setMark(char val) {
 	mark = val;
 }
 
