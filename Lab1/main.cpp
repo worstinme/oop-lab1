@@ -39,17 +39,17 @@ void Phone::Input() {
 	cout << "Input num (Int): " << endl;
 	cin >> value;
 	while (validateAndSetNum(value) == false) {
-		cout << "please input only int from 0 to 2147483647: " << endl;
+		cout << "please input only int from 1 to 2147483647: " << endl;
 		cin.clear();
 		cin >> value;
 	}
 	cin.clear();
 
 	// wait for valid Num input
-	cout << "Input sum (float, 0+, with dot separator): " << endl;
+	cout << "Input sum (0 to 1000, with comma separator): " << endl;
 	cin >> value;
 	while (validateAndSetSum(value) == false) {
-		cout << "please input float number, with dot as decimal separator only: " << endl;
+		cout << "please input sum from 0 to 1000, with comma separator: " << endl;
 		cin.clear();
 		cin >> value;
 	}
@@ -74,6 +74,7 @@ int main()
 	p.Print();
 	cout << endl;
 	system("pause");
+
 	return 0;
 }
 
@@ -127,25 +128,19 @@ bool Phone::validateAndSetNum(string value)
 	return true;
 }
 
-bool Phone::validateAndSetSum(string value)
+bool Phone::validateAndSetSum(std::string value)
 {
 	// check if string is empty or not numeric
 	if (value.empty() || !isNumericString(value)) {
 		return false;
 	}
 
-	//cast string to float
-	istringstream issValue(value);
-	float castedNumber;
-	issValue >> castedNumber;
-
-	// check if cast is succeed and float is greater then 0
-	if (issValue.fail() || castedNumber <= 0) {
+	float floatedNumber = stof(value);
+	if (floatedNumber < 0 || floatedNumber > 1000)
+	{
 		return false;
 	}
-
-	sum = castedNumber;
-	issValue.clear();
+	sum = floatedNumber;
 	return true;
 }
 
@@ -156,7 +151,7 @@ bool Phone::isStringContainsDigitsOnly(const string s)
 
 bool Phone::isNumericString(const string s)
 {
-	return(strspn(s.c_str(), ".0123456789") == s.size());
+	return(strspn(s.c_str(), "-0123456789,") == s.size());
 }
 
 // setters
